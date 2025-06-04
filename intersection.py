@@ -202,12 +202,16 @@ class Intersection:
         
         # Kavşak boşsa, kavşağa en yakın araca geçiş izni ver
         if approaching_vehicles:
-            # En yakın aracı bul (basit bir yaklaşım)
-            closest_vehicle = approaching_vehicles[0]
-            
+            # En yakın aracı bul
+            def distance_to_intersection(vehicle):
+                vx, vy = vehicle.x, vehicle.y
+                return abs(vx - self.center_x) + abs(vy - self.center_y)
+
+            closest_vehicle = min(approaching_vehicles, key=distance_to_intersection)
+
             for vehicle in approaching_vehicles:
                 vehicle.stop()  # Önce tüm araçları durdur
-            
+
             closest_vehicle.resume()  # Sadece en yakın aracın geçmesine izin ver
             allowed_vehicles.append(closest_vehicle)
         
